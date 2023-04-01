@@ -52,6 +52,7 @@ logger.info('done.')
 
 # %%
 PYTHON_VERSION = "{major}.{minor}.{micro}".format(
+
     major=version_info.major, minor=version_info.minor, micro=version_info.micro
 )
 
@@ -76,7 +77,6 @@ conda_env = {
 
 np.random.seed(RANDOM_SEED)
 
-# Start an MLflow run; the "with" keyword ensures we'll close the run even if this cell crashes
 pipe = Pipeline([('embedder', embedder), ('clusterer', KMeans())])
 
 best_metric = np.Inf
@@ -121,7 +121,7 @@ for r in sorted(results_df.label.unique()):
     logger.info('------------------------------------')
     logger.info(f'samples from cluster={r}')
     logger.info('------------------------------------')
-    for index, row in results_df[results_df.label == r].head(N_REVIEW_SAMPLES).iterrows():  # noqa: E501
+    for index, row in results_df[results_df.label == r].head(N_REVIEW_SAMPLES).iterrows():
         logger.info(row['sentence'])
 
 # %%
