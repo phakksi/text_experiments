@@ -3,12 +3,15 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# Local data folder
+data/
 # C extensions
 *.so
 
 # Distribution / packaging
 .Python
 build/
+logs/
 develop-eggs/
 dist/
 downloads/
@@ -127,3 +130,7 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+mlruns/
+models/
+.vscode/
+.idea/
