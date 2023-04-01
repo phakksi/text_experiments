@@ -1,36 +1,34 @@
-from typing import Iterable
 from sentence_transformers import SentenceTransformer
-from sklearn.cluster import KMeans
-from utils.logging import logger
+from sklearn.base import BaseEstimator, TransformerMixin
+from collections import defaultdict
+from sklearn.metrics import get_scorer, silhouette_score
 
 
-class SentenceClusterer():
-    def __init__(self,
-                 transformer_name: str = 'all-MiniLM-L6-v2') -> None:  # noqa: E501
+class BertEmbedder(BaseEstimator, TransformerMixin):
 
-        self.__transformer_name = transformer_name
-        self.embeddings = None
-        self.__transformer = SentenceTransformer(self.__transformer_name)
-        self.__labels = None
+    def __init__(self, model_name: str = 'multi-qa-MiniLM-L6-cos-v1'):
+        self.model_name = model_name
 
-    def __load_transformer(self):
-        self.__transformer = SentenceTransformer(self.__transformer_name)
+    def fit(self, X, y=None):
+        return self
 
-    def __apply_embeddings(self, sentences: Iterable[str]):
-        self.embedddings = self.__transformer.encode(sentences)
+    def transform(self, raw_documents):
+        # Perform arbitary transformation
+        model = SentenceTransformer(self.model_name)
+        return model.encode(raw_documents)
 
-    def set_transformer(self, transformer_name):
-        self.__transformer_name = transformer_name
-        self.__load_transformer()
-        self.__apply_embeddings()
+# Evaluate metrics
 
-    def fit(self, sentences: Iterable[str], n_clusters: int = 5):
-        if self.embeddings is None:
-            self.embedddings = self.__transformer.encode(sentences)
-        logger.info(len(self.embedddings))
-        # km = KMeans(n_clusters)
-        # logger.info(f'Training KMeans (n={n_clusters})')
 
-        #self.__labels = km.fit_predict(self.embeddings)
+def eval_metrics(self, actual, pred):
 
-        return self.__labels
+    results = defaultdict(None)
+
+    for met in self.eval_metrics_list:
+        if met == 'silhouette_score':
+            results['silhouette_score'] = silhouette_score(
+                self.embedded_sentences, pred)
+        else:
+            results[met] = get_scorer(met)._score_func(actual, pred)
+
+    return results
